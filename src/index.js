@@ -34,13 +34,20 @@ btnClose.addEventListener('click', () => {
 // работа с товаром
 const cards = document.querySelectorAll('.goods .card');
 const cartWrapper = document.querySelector('.cart-wrapper');
+const btnCardDel = document.querySelectorAll('.cart-wrapper .card');
 const cartEmpty = document.getElementById('cart-empty');
 const countGoods = document.querySelector('.counter');
+const cardsCart = document.querySelector('.cart-wrapper');
 
 cards.forEach((card) => {
     const btn = card.querySelector('button');
     btn.addEventListener('click', () => {
          const cardClone = card.cloneNode(true);
+         const btnCart = cardClone.querySelector('button');
+         btnCart.textContent = 'Удалить';
+         cardClone.addEventListener('click', () => {
+            cardClone.remove();
+         });
          cartWrapper.appendChild(cardClone);
          cartEmpty.remove();
          showData();
