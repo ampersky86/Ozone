@@ -1,1 +1,1 @@
-# Ozone
+# Мини Ozone на JavaScript
