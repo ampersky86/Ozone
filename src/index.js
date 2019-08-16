@@ -99,15 +99,15 @@ function actionPage() {
             if (checkboxDiscount.checked) {
                 if (!card.querySelector('.card-sale')) {
                     card.parentNode.remove();
+                } else {
+                    goods.appendChild(card.parentNode);
                 }
+            } else {
+                goods.appendChild(card.parentNode);
             }
             if ((min.value && price < min.value) || (max.value && price > max.value)) {
                 card.parentNode.remove();
-            } else {
-                if (!checkboxDiscount.checked) {
-                    goods.appendChild(card.parentNode);
-                }
-            }
+            } 
         });
     }
     min.addEventListener('change', changePrice);
