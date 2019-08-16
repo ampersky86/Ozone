@@ -1,9 +1,13 @@
 'use strict';
 
-toogleCheckbox();
-toogleCart();
-addrmGoods();
-actionPage();
+getData().then((data) => {
+    renderCards(data);
+    toogleCheckbox();
+    toogleCart();
+    addrmGoods();
+    actionPage();
+    renderCatalog();
+});
 
 // Работа с checkbox
 function toogleCheckbox() {
@@ -90,9 +94,9 @@ function actionPage() {
     const search = document.querySelector('.search-wrapper_input');
     const searchBtn = document.querySelector('.search-btn');
 
-    checkboxDiscount.addEventListener('click', changePrice);
+    checkboxDiscount.addEventListener('click', filter);
 
-    function changePrice() {
+    function filter() {
         cards.forEach((card) => {
             const cardPrice = card.querySelector('.card-price').textContent;
             const price = parseFloat(cardPrice);
@@ -107,11 +111,11 @@ function actionPage() {
             }
             if ((min.value && price < min.value) || (max.value && price > max.value)) {
                 card.parentNode.remove();
-            } 
+            }
         });
     }
-    min.addEventListener('change', changePrice);
-    max.addEventListener('change', changePrice);
+    min.addEventListener('change', filter);
+    max.addEventListener('change', filter);
 
     searchBtn.addEventListener('click', () => {
         const searchText = new RegExp(search.value.trim(), 'i');
@@ -127,3 +131,80 @@ function actionPage() {
     });
 }
 //end Работа с фильтром
+
+// получене даанных с сервера
+
+function getData() {
+    return fetch('../db/db.json')
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error("Данные не получены:" + response.status);
+            }
+        })
+        .then(data => {
+            return data;
+        })
+        .catch(err => console.warn(err));
+
+}
+//вывод карточек товара
+function renderCards(data) {
+    const goodsWrapper = document.querySelector('.goods');
+    data.goods.forEach((good) => {
+        const card = document.createElement('div');
+        card.className = 'col-12 col-md-6 col-lg-4 col-xl-3';
+        card.innerHTML += `<div class="card" data-category = "${good.category}">
+        ${good.sale ?'<div class="card-sale">🔥Hot Sale🔥</div>':''}
+                        <div class="card-img-wrapper">
+                            <span class="card-img-top"
+                            style="background-image: url('${good.img}')"></span>
+                         </div>
+                        <div class="card-body justify-content-between">
+                          <div class="card-price" style = "${good.sale ?'color:red' : ''}">${good.price}</div>
+                          <h5 class="card-title">${good.title}</h5>
+                        <button class="btn btn-primary">В корзину</button>
+                       </div>
+                     </div>`;
+        goodsWrapper.appendChild(card);
+    });
+    // 
+}
+
+// end получене даанных с сервера
+
+// Фильтр по категориям
+function renderCatalog() {
+    const cards = document.querySelectorAll('.goods .card');
+    const catalogList = document.querySelector('.catalog-list');
+    const catalogBtn = document.querySelector('.catalog-button');
+    const catalogWrapper = document.querySelector('.catalog');
+    const categories = new Set();
+    cards.forEach((card) => {
+        categories.add(card.dataset.category);
+    });
+    categories.forEach((item) => {
+        const li = document.createElement('li');
+        catalogList.appendChild(li);
+        li.textContent = item;
+    });
+
+    catalogBtn.addEventListener('click', () => {
+        if (catalogWrapper.style.display) {
+            catalogWrapper.style.display = '';
+        } else {
+            catalogWrapper.style.display = 'block';
+        }
+        if (event.target.tagName === 'LI') {
+            cards.forEach((card) => {
+                  if (event.target.textContent === card.dataset.category) {
+                      card.parentNode.style.display = '';
+                  } else {
+                    card.parentNode.style.display = 'none';
+                  }               
+            });
+        }
+    });
+}
+// end Фильтр по категориям
