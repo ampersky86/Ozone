@@ -12,7 +12,6 @@ getData().then((data) => {
 // Работа с checkbox
 function toogleCheckbox() {
     const checkbox = document.querySelectorAll('.filter-check_checkbox');
-
     for (let i = 0; i < checkbox.length; i++) {
         checkbox[i].addEventListener('change', function () {
             if (this.checked === true) {
@@ -133,7 +132,6 @@ function actionPage() {
 //end Работа с фильтром
 
 // получене даанных с сервера
-
 function getData() {
     return fetch('../db/db.json')
         .then((response) => {
@@ -147,7 +145,6 @@ function getData() {
             return data;
         })
         .catch(err => console.warn(err));
-
 }
 //вывод карточек товара
 function renderCards(data) {
@@ -168,8 +165,7 @@ function renderCards(data) {
                        </div>
                      </div>`;
         goodsWrapper.appendChild(card);
-    });
-    // 
+    }); 
 }
 
 // end получене даанных с сервера
