@@ -605,7 +605,7 @@ nav .search-btn button::before {
   margin-left: auto;
 }
 
-.catalog-list li.active {
+.catalog-list .active {
   color: red;
 }
 /*# sourceMappingURL=style.css.map */
