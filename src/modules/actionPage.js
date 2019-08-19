@@ -1,4 +1,4 @@
-// import filter from './filter';
+import filter from './filter';
 
 // Фильтр Акций и цен
 export default function actionPage() {
@@ -7,28 +7,10 @@ export default function actionPage() {
     const goods = document.querySelector('.goods');
     const min = document.getElementById('min');
     const max = document.getElementById('max');
+    const activeLi = document.querySelector('.catalog-list li.active');
     const search = document.querySelector('.search-wrapper_input');
     const searchBtn = document.querySelector('.search-btn');
-    function filter() {
-        cards.forEach((card) => {
-            const cardPrice = card.querySelector('.card-price').textContent;
-            const price = parseFloat(cardPrice);
-            if (checkboxDiscount.checked) {
-                if (!card.querySelector('.card-sale')) {
-                    card.parentNode.remove();
-                } else {
-                    goods.appendChild(card.parentNode);
-                    // console.log('card.parentNode_1: ', card);
-                }
-            } else {
-                goods.appendChild(card.parentNode);
-                // console.log('card.parentNode_2: ', card);
-            }
-            if ((min.value && price < min.value) || (max.value && price > max.value)) {
-                card.parentNode.remove();
-            }
-        });
-    }
+
 
     checkboxDiscount.addEventListener('click', filter);
     min.addEventListener('change', filter);
